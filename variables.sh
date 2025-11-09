@@ -33,3 +33,18 @@ ipMask=0
 # Used for the network IP and Broadcast, respectfully.
 ipNetwork=0
 ipBroadcast=0
+
+# Used as input for binary calculator
+decimalInput=()
+
+# Used as output for binary calculator. Counts only bits used by the network.
+binaryOutputNetwork=()
+
+# Used as output for binary calculator. Counts only bits used by the hosts.
+binaryOutputHosts=()
+
+# If the amount of network bits in an octet is needed.
+_octetNBits=0
+
+# Used in case amount of hosts is needed
+hostAmount=0
