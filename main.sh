@@ -16,7 +16,11 @@ source ./config.sh
 source ./variables.sh
 
 
-
+if [[ "$EUID" -eq 0 ]]; then
+        
+        printf "\e[33The current script will prompt when sudo is required. You can run it as regular user.\e[0m\n\n"
+       
+fi
 
 
 # Greets the user and gives them the following options: 1 for adapter config, 2 for apt config and 3 for DHCP config.
