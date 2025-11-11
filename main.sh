@@ -12,14 +12,15 @@
 # Sources relevant files.
 source ./tools.sh
 source ./utils.sh
-source ./config.sh
+source ./config.conf
 source ./variables.sh
 
 
 if [[ "$EUID" -eq 0 ]]; then
         
-        printf "\e[33The current script will prompt when sudo is required. You can run it as regular user.\e[0m\n\n"
-       
+        printf "\e[33mThe current script will prompt when sudo is required. You can run it as regular user.\e[0m\n\n"
+        
+        exit
 fi
 
 

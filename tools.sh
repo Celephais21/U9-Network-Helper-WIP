@@ -3,42 +3,72 @@
 
 source ./variables.sh
 source ./utils.sh
-source ./config.sh
+source ./config.conf
 
 # This script stores all the fundamental functions used on main.sh
 
 # Greets the user and asks what function from U9Installer they will use.
 greeting () {
 
-    local option="none"
-    local optionNumber=0
+        if [[ $firstStart = true ]]; then
 
-    printf "You are using version %s of U9Installer.\n" "$version"
-    printf "Please, select one of the options below:\n"
-    
-    # Give each option a number.
-    for option in "${CONF_OPTIONS[@]}"; do
-            optionNumber=$(( optionNumber + 1 ))
-            echo "[$optionNumber] $option"
-            
-    done
+                printf "It seems like this is the first time you are starting the program.\n"
+                if [[ ! -e $INTERFACES_FOLDER/test.txt ]]; then 
 
-    # Check if option typed is valid
-    while true; do
 
-            read -r helperOptionSelected
-            if [[ "$helperOptionSelected" =~ ^[1-3]$ && $helperOptionSelected -le 3 ]]; then
-                    helperOptionSelected=$(( helperOptionSelected - 1 ))
-                    printf "Starting %s...\n\n" "${helperConfigStarterPhrase[$helperOptionSelected]}"            
-                    break
-            else
-
-                echo "Invalid input. Please try again."
+                        printf "The %s does not contain the 'interfaces' file\n" "$INTERFACES_FOLDER"
+                        printf "Please, verify the specified path and try again.\n"
+                        return 1
                 
-            fi
+
+                fi
+
+                cp config.conf config.temp
+                sed -i  's/firstStart=true/firstStart=false/g' ./config.conf
+
+        else
+               
+               if [[ ! -e $INTERFACES_FOLDER/test.txt ]]; then 
 
 
-    done
+                        printf "The %s does not contain the 'interfaces' file\n" "$INTERFACES_FOLDER"
+                        printf "Please, verify the specified path and try again\n"
+                        return 1
+
+                fi 
+
+        fi
+
+
+        local option="none"
+        local optionNumber=0
+
+        printf "You are using version %s of U9Installer.\n" "$version"
+        printf "Please, select one of the options below:\n"
+        
+        # Give each option a number.
+        for option in "${CONF_OPTIONS[@]}"; do
+                optionNumber=$(( optionNumber + 1 ))
+                echo "[$optionNumber] $option"
+                
+        done
+
+        # Check if option typed is valid
+        while true; do
+
+                read -r helperOptionSelected
+                if [[ "$helperOptionSelected" =~ ^[1-3]$ && $helperOptionSelected -le 3 ]]; then
+                        helperOptionSelected=$(( helperOptionSelected - 1 ))
+                        printf "Starting %s...\n\n" "${helperConfigStarterPhrase[$helperOptionSelected]}"            
+                        break
+                else
+
+                        echo "Invalid input. Please try again."
+                        
+                fi
+
+
+        done
 }
 
 
@@ -109,7 +139,7 @@ networkHelper(){
 
                                 sudo bash -c '
                                         # Creates backup of Interfaces file
-                                        cp "$INSTANCE_FOLDER/test.txt" "$INSTANCE_FOLDER/test.bkp"
+                                        cp "$INTERFACES_FOLDER/test.txt" "$INSTANCE_FOLDER/test.bkp"
                                         
                                         {
                                         printf "\n\n# Network card '%s' dhcp configuration\n" "${ethernetCards[$userInput]}"
